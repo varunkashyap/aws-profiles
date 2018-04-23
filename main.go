@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,11 +12,38 @@ import (
 	"github.com/go-ini/ini"
 )
 
-var credentialsFile string
+var (
+	credentialsFile string
+	verbose         bool
+	help            bool
+)
 
 func init() {
 	flag.StringVar(&credentialsFile, "f", "~/.aws/credentials", "Path to AWS credentials file")
+	flag.BoolVar(&verbose, "v", false, "Verbose output for debugging")
+	flag.BoolVar(&help, "h", false, "Print command usage")
 	flag.Parse()
+
+	if help == true {
+		usage := `aws-profiles is a tool to manage multiple AWS profiles using the credentials file
+
+Usage: 
+
+aws-profiles [-f filepath] [-v] [-h] profile-name
+
+  -f	Override the default credentials file location (~/.aws/credentials)
+  -v	Turn on verbose logging for debugging
+  -h	Print this message
+`
+		fmt.Println(usage)
+		os.Exit(0)
+	}
+
+	// disable logging if verbose is false
+	if verbose == false {
+		log.SetFlags(0)
+		log.SetOutput(ioutil.Discard)
+	}
 }
 
 func main() {

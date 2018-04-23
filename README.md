@@ -8,7 +8,16 @@ If you need to interact with more than one AWS accounts but have not yet got aro
 eval $(aws-profiles dev)
 ```
 
-This should pick up a profile named 'dev' from your aws.credentials file. By default, aws-profiles looks for the profiles inside `~/.aws/credentials`. This can be overwritten using the `-f` flag, like so:
+This should pick up a profile named 'dev' from your aws credentials file and load it into the current environment. You can then run `env` to make sure that the appropriate environment variables have been loaded and available to be used by other  tools (aws cli, docker etc):
+
+```bash
+$ env | grep AWS
+
+AWS_SECRET_ACCESS_KEY=jXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX5
+AWS_ACCESS_KEY_ID=AKIAXXXXXXXXXXXXXXXX
+```
+
+By default, aws-profiles looks for the profiles inside `~/.aws/credentials`. This can be overwritten using the `-f` flag, like so:
 
 ```bash
 eval $(aws-profiles -f /my/credentials/location dev)
